@@ -1,0 +1,60 @@
+{
+    "output_file" : "config.json",
+    "eventMonth" : {
+        "type" : "numberbox",
+        "value" : 1,
+        "label" : "Event Month",
+        "tooltip" : "The event month as a number from 1-12",
+        "group" : "Response"
+    },
+    "eventDay" : {
+        "type" : "numberbox",
+        "value" : 1,
+        "label" : "Event Day",
+        "tooltip" : "The day of the month your event is on",
+        "group" : "Response"
+    },
+    "countdownMessage" : {
+        "type" : "textbox",
+        "value" : "$days until $event",
+        "label" : "Countdown Message",
+        "tooltip" : "The message to display while counting down to the event. $days is the days until and $event is the Event Name setting",
+        "group" : "Response"
+    },
+    "eventName" : {
+        "type" : "textbox",
+        "value" : "something cool happens!",
+        "label" : "Event Name",
+        "tooltip" : "The name of your event",
+        "group" : "Response"
+    },
+    "eventMessage" : {
+        "type" : "textbox",
+        "value" : "Today is the day!",
+        "label" : "Event Message",
+        "tooltip" : "The message to display on the day of the event",
+        "group" : "Response"
+    },
+    "commandName" : {
+        "type" : "textbox",
+        "value" : "!birthday",
+        "label" : "Command Name",
+        "tooltip" : "Name of the command as it will be used in chat",
+        "group" : "General"
+    },
+    "cooldown" : {
+        "type" : "numberbox",
+        "value" : 0,
+        "label" : "Command cooldown in seconds",
+        "tooltip" : "How long users must wait before using the command",
+        "group" : "General"
+    },
+    "permission" : {
+        "type" : "dropdown",
+        "value" : "Everyone",
+        "items" : ["Everyone","Regular","Subscriber","Moderator","Editor"],
+        "label" : "Permission Level",
+        "tooltip" : "Specify the user permission level required to use this command",
+        "group" : "General"
+    }
+}
