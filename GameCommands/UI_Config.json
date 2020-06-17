@@ -1,0 +1,25 @@
+{
+    "output_file" : "config.json",
+    "commandName" : {
+        "type" : "textbox",
+        "value" : "!command",
+        "label" : "Command Name",
+        "tooltip" : "Name of the command as it will be used in chat",
+        "group" : "General"
+    },
+    "cooldown" : {
+        "type" : "numberbox",
+        "value" : 0,
+        "label" : "Command cooldown in seconds",
+        "tooltip" : "How long users must wait before using the command",
+        "group" : "General"
+    },
+    "permission" : {
+        "type" : "dropdown",
+        "value" : "Everyone",
+        "items" : ["Everyone","Regular","Subscriber","Moderator","Editor"],
+        "label" : "Permission Level",
+        "tooltip" : "Specify the user permission level required to use this command",
+        "group" : "General"
+    }
+}
