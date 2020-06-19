@@ -20,10 +20,10 @@ Feel free to completely modify the `command_list.json` file, just be sure to kee
 ```json
 {
     "value1" : "text1",
-    "value2" : "text2",
-    // etc.
+    "value2" : "text2"
 }
 ```
+etc.
 
 ## User Settings
 
