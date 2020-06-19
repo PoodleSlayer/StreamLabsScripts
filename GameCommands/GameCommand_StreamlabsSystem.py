@@ -2,54 +2,32 @@ import json
 import os
 import codecs
 import ctypes
+import sys
 import time
+sys.path.append(os.path.join(os.path.dirname(__file__), "lib")) #point at lib folder for classes / references
+
+import clr
+clr.AddReference("IronPython.Modules.dll")
+#import subprocess
+from System.Diagnostics import Process
 
 # StreamLabs info
 ScriptName = "Game Commands"
 Website = "https://github.com/poodleslayer"
 Description = "Attempts to input keys to the current application being used."
 Creator = "PoodleSlayer"
-Version = "1.0.0"
+Version = "1.0.1"
 
 settings = {}
 commandList = {}
 commandName = ""
-
-# DirectInput scan codes
-# reference: https://gist.github.com/tracend/912308
-DIKeys = {
-    'W' : 0x11,
-    'A' : 0x1E,
-    'S' : 0x1F,
-    'D' : 0x20,
-    'Q' : 0x10,
-    'E' : 0x12,
-    'R' : 0x13,
-    'T' : 0x14,
-    'Y' : 0x15,
-    'U' : 0x16,
-    'I' : 0x17,
-    'O' : 0x18,
-    'P' : 0x19,
-    'F' : 0x21,
-    'G' : 0x22,
-    'H' : 0x23,
-    'J' : 0x24,
-    'K' : 0x25,
-    'L' : 0x26,
-    'Z' : 0x2C,
-    'X' : 0x2D,
-    'C' : 0x2E,
-    'V' : 0x2F,
-    'B' : 0x30,
-    'N' : 0x31,
-    'M' : 0x32,
-}
+pythonPath = ""
+scriptPath = ""
 
 def Init():
     SendInput = ctypes.windll.user32.SendInput
     
-    global settings, commandName, commandList
+    global settings, commandName, commandList, pythonPath, scriptPath
     work_dir = os.path.dirname(__file__)
 
     # load UI settings
@@ -59,7 +37,8 @@ def Init():
     except:
         settings = {
             "commandName" : "!command",
-            "cooldown" : 0,
+            "cost" : 0,
+            "cooldown" : 30,
             "permission" : "Everyone"
             }
 
@@ -74,79 +53,83 @@ def Init():
             }
     
     commandName = settings["commandName"]
+    pythonPath = os.path.join(os.__file__.split("Lib\\")[0], "python.exe")
+    scriptPath = os.path.dirname(os.path.abspath(__file__))
+    scriptPath = os.path.join(scriptPath, "keys.py")
     return
 
 def Execute(data):
-    if data.IsChatMessage() and (data.GetParam(0).lower() == commandName) and Parent.HasPermission(data.User, settings["permission"], "") and not Parent.IsOnUserCooldown(ScriptName, commandName, data.User):
-        countdown()
+    if Parent.IsOnUserCooldown(ScriptName, commandName, data.User):
+        send_message("HOL' UP")
+    if data.IsChatMessage() and (data.GetParam(0) == commandName) and Parent.HasPermission(data.User, settings["permission"], "") and not Parent.IsOnUserCooldown(ScriptName, commandName, data.User):
+        chatMessage = ""
+        commandToUse = ""
+        userId = data.User
+        username = data.UserName
+        #points = Parent.GetPoints(userId)
+        points = 10
+
+        try:
+            commandToUse = str(data.GetParam(1))
+            #log(data.User + " used the command: " + data.Message)
+        except Exception, e:
+            chatMessage = "Please specify a valid command"
+            send_message(chatMessage)
+            return
+        
+        ### TODO - get costs and stuff working correctly
+        #if settings["cost"] > points:
+        #    chatMessage = "Not enough points!"
+        #    send_message(chatMessage)
+        #    log("not enough currency")
+        #    return
+        #if (Parent.IsOnCooldown(ScriptName, settings["command"]) or Parent.IsOnUserCooldown(ScriptName, settings["command"], userId)):
+        #    chatMessage = "Still on cooldown!"
+        #    send_message(chatMessage)
+        #    log("command on cooldown")
+        #    return
+        #log("attempting to send inputs...")
+        #Parent.RemovePoints(userId, username, settings["cost"])
         Parent.AddUserCooldown(ScriptName, commandName, data.User, settings["cooldown"])
+        chatMessage = username + " has used command " + commandToUse + "!"
+        # useful for debugging
+        #time.sleep(10)
+
+        #log("Python is located at: " + pythonPath + " and script is " + scriptPath)
+        #log("running external process...")
+        p = Process()
+        p.StartInfo.FileName = pythonPath
+        # oh my gosh why does the chatbot folder have a space in it
+        p.StartInfo.Arguments = "\"" + scriptPath + "\"" + " " + commandList[commandToUse]
+        p.StartInfo.UseShellExecute = False
+        p.StartInfo.CreateNoWindow = True
+        p.Start()
+        #log("process started: " + p.StartInfo.FileName + p.StartInfo.Arguments)
+        p.WaitForExit()
+        #log("process exited with " + str(p.ExitCode))
+
+        send_message(chatMessage)
     return
 
 def Tick():
     return
 
 def sendGameCommand():
-    # send key inputs to active window
-    type_keys(commandList["cheat3"])
+    # used for debugging since the Execute event isn't called
+    time.sleep(5)
+    # need way to call python without IronPython like in StreamLabs context :c
     return
-
-def type_keys(inputString):
-    for c in inputString.upper():
-        if c in DIKeys:
-            PressKey(DIKeys[c])
-            ReleaseKey(DIKeys[c])
 
 def send_message(message):
-    #Parent.SendStreamMessage(message)
-    print message #this is for debugging
+    Parent.SendStreamMessage(message)
+    #print message #this is for debugging
     return
 
-# C struct redefinitions
-# as per SerpentAI
-# https://github.com/SerpentAI/SerpentAI/blob/dev/serpent/input_controllers/native_win32_input_controller.py
-PUL = ctypes.POINTER(ctypes.c_ulong)
-class KeyBdInput(ctypes.Structure):
-    _fields_ = [("wVk", ctypes.c_ushort),
-                ("wScan", ctypes.c_ushort),
-                ("dwFlags", ctypes.c_ulong),
-                ("time", ctypes.c_ulong),
-                ("dwExtraInfo", PUL)]
+def log(message):
+    Parent.Log(ScriptName, message)
+    #print message
+    return
 
-class HardwareInput(ctypes.Structure):
-    _fields_ = [("uMsg", ctypes.c_ulong),
-                ("wParamL", ctypes.c_short),
-                ("wParamH", ctypes.c_ushort)]
-
-class MouseInput(ctypes.Structure):
-    _fields_ = [("dx", ctypes.c_long),
-                ("dy", ctypes.c_long),
-                ("mouseData", ctypes.c_ulong),
-                ("dwFlags", ctypes.c_ulong),
-                ("time",ctypes.c_ulong),
-                ("dwExtraInfo", PUL)]
-
-class Input_I(ctypes.Union):
-    _fields_ = [("ki", KeyBdInput),
-                 ("mi", MouseInput),
-                 ("hi", HardwareInput)]
-
-class Input(ctypes.Structure):
-    _fields_ = [("type", ctypes.c_ulong),
-                ("ii", Input_I)]
-
-def PressKey(hexKeyCode):
-    extra = ctypes.c_ulong(0)
-    ii_ = Input_I()
-    ii_.ki = KeyBdInput( 0, hexKeyCode, 0x0008, 0, ctypes.pointer(extra) )
-    x = Input( ctypes.c_ulong(1), ii_ )
-    ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
-
-def ReleaseKey(hexKeyCode):
-    extra = ctypes.c_ulong(0)
-    ii_ = Input_I()
-    ii_.ki = KeyBdInput( 0, hexKeyCode, 0x0008 | 0x0002, 0, ctypes.pointer(extra) )
-    x = Input( ctypes.c_ulong(1), ii_ )
-    ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
-
-Init()
-sendGameCommand()
+### debugging
+#Init()
+#sendGameCommand()

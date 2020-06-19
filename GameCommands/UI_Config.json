@@ -7,9 +7,16 @@
         "tooltip" : "Name of the command as it will be used in chat",
         "group" : "General"
     },
-    "cooldown" : {
+    "cost" : {
         "type" : "numberbox",
         "value" : 0,
+        "label" : "Cost",
+        "tooltip" : "How much it costs to use this command in terms of stream currency",
+        "group" : "General"
+    },
+    "cooldown" : {
+        "type" : "numberbox",
+        "value" : 30,
         "label" : "Command cooldown in seconds",
         "tooltip" : "How long users must wait before using the command",
         "group" : "General"
