@@ -29,10 +29,9 @@ Feel free to completely modify the `command_list.json` file, just be sure to kee
         "cost" : 100,
         "message" : "value2 was used by $user"
     }
-    // etc.
 }
 ```
-where `value` is the series of keys that will be input to the game, `cost` is how many channel points it costs to use, and `message` is the message to show in chat (which supports the `$user` variable to reference the username of whoever used the command).
+and so on, where `value` is the series of keys that will be input to the game, `cost` is how many channel points it costs to use, and `message` is the message to show in chat (which supports the `$user` variable to reference the username of whoever used the command).
 
 ## User Settings
 
