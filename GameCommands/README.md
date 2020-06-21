@@ -19,19 +19,32 @@ and the script will attempt to send the corresponding text keys `CHEATONE` to th
 Feel free to completely modify the `command_list.json` file, just be sure to keep it in the format of:
 ```json
 {
-    "value1" : "text1",
-    "value2" : "text2",
+    "value1" : {
+        "value" : "text1",
+        "cost" : 10,
+        "message" : "$user has used value1!"
+    },
+    "value2" : {
+        "value" : "text2",
+        "cost" : 100,
+        "message" : "value2 was used by $user"
+    }
     // etc.
 }
 ```
+where `value` is the series of keys that will be input to the game, `cost` is how many channel points it costs to use, and `message` is the message to show in chat (which supports the `$user` variable to reference the username of whoever used the command).
 
 ## User Settings
 
 This script supports a variety of User Settings via the StreamLabs script UI:
 
 - **Command Name** - defaults to "!command". Allows you to specify a custom command to be used in chat.
-- **Cost** - specify an amount of your StreamLabs stream currency to spend to use this command. Defaults to 0 for fun c:
+- **Invalid Message** - message to display in chat if the user tries to use a command value that doesn't exist. Supports the `$user` variable where `$user` is the username of the person who used the command.
+- **Universal Cost** - turn this checkbox ON to use the same cost for all commands, otherwise command costs are individual and must be set in the `command_list.json` file. Defaults to OFF.
+- **Cost** - specify an amount of your StreamLabs stream currency to spend to use this command. This will be used as the cost if the `Universal Cost` checkbox is checked. Defaults to 0 for fun c: 
+- **Cost Message** - message to display in chat if the user does not have enough points to use the command. Supports the `$user` and `$currency` variables where `$user` is the username and `$currency` is the custom name of your channel currency in StreamLabs.
 - **Cooldown** - how long (in seconds) users must wait between successive uses of this command. Defaults to 30 seconds.
+- **Cooldown Message** - message to display in chat if the user is still on a cooldown, showing the remaining cooldown duration in seconds. Supports the `$user` and `$cd` variables where `$user` is username and `$cd` is the remaining cooldown duration in seconds.
 - **Permission** - who is allowed to use this command. Supports the basic StreamLabs role groups (Everyone, Regular, Subscriber, Moderator, Editor) and defaults to Everyone.
 
 ## Why Two Script Files?

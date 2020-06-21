@@ -7,6 +7,20 @@
         "tooltip" : "Name of the command as it will be used in chat",
         "group" : "General"
     },
+    "invalidMessage" : {
+        "type" : "textbox",
+        "value" : "Invalid command value $user, please try again!",
+        "label" : "Invalid Value Message",
+        "tooltip" : "Message to send if the user enters an invalid value",
+        "group" : "General"
+    },
+    "universalCost" : {
+        "type" : "checkbox",
+        "value" : false,
+        "label" : "Universal Cost",
+        "tooltip" : "Set this to use one cost across all commands",
+        "group" : "General"
+    },
     "cost" : {
         "type" : "numberbox",
         "value" : 0,
@@ -14,11 +28,25 @@
         "tooltip" : "How much it costs to use this command in terms of stream currency",
         "group" : "General"
     },
+    "costMessage" : {
+        "type" : "textbox",
+        "value" : "$user does not have enough $currency",
+        "label" : "Cost Message",
+        "tooltip" : "Message to send if the user does not have enough currency to use the command",
+        "group" : "General"
+    },
     "cooldown" : {
         "type" : "numberbox",
         "value" : 30,
         "label" : "Command cooldown in seconds",
         "tooltip" : "How long users must wait before using the command",
+        "group" : "General"
+    },
+    "cooldownMessage" : {
+        "type" : "textbox",
+        "value" : "$user still has $cd seconds until ready!",
+        "label" : "Cooldown Message",
+        "tooltip" : "Message to send if command is still on user cooldown",
         "group" : "General"
     },
     "permission" : {

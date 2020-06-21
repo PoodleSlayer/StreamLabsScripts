@@ -1,5 +1,20 @@
 {
-    "cheat1" : "CHEATONE",
-    "cheat2" : "CHEATTWO",
-    "cheat3" : "CHEATTHREE"
+    "cheat1" : 
+    {
+        "value" : "CHEATONE",
+        "cost" : 10,
+        "message" : "$user has used cheat1!"
+    },
+    "cheat2" : 
+    {
+        "value" : "CHEATTWO",
+        "cost" : 50,
+        "message" : "cheat2 was used by $user"
+    },
+    "cheat3" :
+    {
+        "value" : "CHEATTHREE",
+        "cost" : 100,
+        "message" : "cheat3, from $user with love"
+    }
 }
