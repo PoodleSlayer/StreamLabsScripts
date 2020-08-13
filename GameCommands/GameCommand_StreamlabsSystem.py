@@ -18,7 +18,7 @@ ScriptName = "Game Commands"
 Website = "https://github.com/poodleslayer"
 Description = "Attempts to input keys to the current application being used."
 Creator = "PoodleSlayer"
-Version = "1.1.0"
+Version = "1.2.0"
 
 settings = {}
 commandList = {}
@@ -39,6 +39,7 @@ Settings_Permission = "permission"
 Replace_Username = "$user"
 Replace_Cooldown = "$cd"
 Replace_Currency = "$currency"
+Replace_Cost = "$cost"
 
 def Init():
     SendInput = ctypes.windll.user32.SendInput
@@ -66,8 +67,9 @@ def Init():
     try:
         with codecs.open(os.path.join(work_dir, "command_list.json"), encoding='utf-8-sig') as json_file2:
             commandList = json.load(json_file2, encoding='utf-8-sig')
-    except:
-        print str(e)
+    except Exception, fe:
+        print str(fe)
+        log("Could not open command_list.json, " + str(fe))
         commandList = {
             "cheat1" : {
                 "value" : "CHEATONE",
@@ -127,26 +129,27 @@ def Execute(data):
         # get the cost
         if settings[Settings_UniversalCost]:
             cost = settings[Settings_Cost]
-            log("using universal cost, cost is " + str(cost))
+            #log("using universal cost, cost is " + str(cost))
         else:
             cost = commandList[commandToUse]["cost"]
-            log("using individual cost, cost is " + str(cost))
+            #log("using individual cost, cost is " + str(cost))
         
         if cost > points:
             chatMessage = settings[Settings_CostMessage]
             chatMessage = chatMessage.replace(Replace_Username, username)
             chatMessage = chatMessage.replace(Replace_Currency, currency)
             send_message(chatMessage)
-            log("not enough currency")
+            #log("not enough currency")
             return
         
         #log("attempting to send inputs...")
-        #Parent.RemovePoints(userId, username, cost)
+        Parent.RemovePoints(userId, username, cost)
         Parent.AddUserCooldown(ScriptName, commandName, data.User, settings[Settings_Cooldown])
         chatMessage = commandList[commandToUse]["message"]
         chatMessage = chatMessage.replace(Replace_Username, username)
+        chatMessage = chatMessage.replace(Replace_Cost, str(cost) + " " + currency)
         # useful for debugging
-        #time.sleep(10)
+        #time.sleep(5)
         sendGameCommand(commandList[commandToUse]["value"])
         send_message(chatMessage)
     return

@@ -1,20 +1,20 @@
 {
     "cheat1" : 
     {
-        "value" : "CHEATONE",
+        "value" : "player.additem f 100",
         "cost" : 10,
-        "message" : "$user has used cheat1!"
+        "message" : "$user has given me 100 gold"
     },
     "cheat2" : 
     {
         "value" : "CHEATTWO",
         "cost" : 50,
-        "message" : "cheat2 was used by $user"
+        "message" : "cheat2 was used by $user for $cost"
     },
     "cheat3" :
     {
         "value" : "CHEATTHREE",
         "cost" : 100,
-        "message" : "cheat3, from $user with love"
+        "message" : "cheat3, from $user with love."
     }
 }

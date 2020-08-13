@@ -31,7 +31,22 @@ DIKeys = {
     'B' : 0x30,
     'N' : 0x31,
     'M' : 0x32,
+    ' ' : 0x39,
+    '`' : 0x29,
+    '0' : 0x0B,
+    '1' : 0x02,
+    '2' : 0x03,
+    '3' : 0x04,
+    '4' : 0x05,
+    '5' : 0x06,
+    '6' : 0x07,
+    '7' : 0x08,
+    '8' : 0x09,
+    '9' : 0x0A,
+    '.' : 0x34
 }
+
+DIK_ENTER = 0x1C
 
 def InputCommands(inputString):
     type_keys(inputString)
@@ -89,6 +104,7 @@ def ReleaseKey(hexKeyCode):
     x = Input( ctypes.c_ulong(1), ii_ )
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
-InputCommands(sys.argv[1])
+#InputCommands(sys.argv[1])
+InputCommands(' '.join(sys.argv[1:]))
 ### debugging
-#InputCommands("potato")
+#InputCommands("player.additem f 100")
