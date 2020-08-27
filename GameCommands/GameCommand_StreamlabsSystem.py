@@ -8,6 +8,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "lib")) #point at lib fo
 
 import clr
 clr.AddReference("IronPython.Modules.dll")
+clr.AddReference("System.Windows.Forms")
+from System.Windows.Forms import SendKeys
+from System import Type, Activator
 from System.Diagnostics import Process
 
 # this can help with running in Python vs IronPython
@@ -18,7 +21,7 @@ ScriptName = "Game Commands"
 Website = "https://github.com/poodleslayer"
 Description = "Attempts to input keys to the current application being used."
 Creator = "PoodleSlayer"
-Version = "1.2.0"
+Version = "1.2.4"
 
 settings = {}
 commandList = {}
@@ -150,6 +153,9 @@ def Execute(data):
         chatMessage = chatMessage.replace(Replace_Cost, str(cost) + " " + currency)
         # useful for debugging
         #time.sleep(5)
+        #sendGameCommandShell(commandList[commandToUse]["value"])
+        #sendGameCommandMsgEv(commandList[commandToUse]["value"])
+        # new version will support multiple input methods. for now just do DirectInput
         sendGameCommand(commandList[commandToUse]["value"])
         send_message(chatMessage)
     return
@@ -157,9 +163,20 @@ def Execute(data):
 def Tick():
     return
 
+# alternative method for inputting keys using Shell.SendKeys
+def sendGameCommandShell(inputString):
+    shell = Activator.CreateInstance(Type.GetTypeFromProgID("WScript.Shell"))
+    shell.SendKeys(inputString)
+    return
+
+# alternative method for inputting keys using Windows Message Events
+def sendGameCommandMsgEv(inputString):
+    #SendKeys.Send(inputString)    # this will cause an error if the receiving application isn't set up to receive messages
+    SendKeys.SendWait(inputString)
+    return
+
+# the default method for inputting keys. uses DirectInput and keyboard scan codes
 def sendGameCommand(inputString):
-    # used for debugging since the Execute event isn't called
-    #time.sleep(5)
     #log("Python is located at: " + pythonPath + " and script is " + scriptPath)
     #log("running external process...")
     p = Process()
@@ -181,7 +198,7 @@ def debugStuff():
 
 def send_message(message):
     Parent.SendStreamMessage(message)
-    #print message #this is for debugging
+    #print message #this is for debugging outside of the StreamLabs context
     return
 
 def log(message):

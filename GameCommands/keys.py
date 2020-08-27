@@ -52,10 +52,25 @@ def InputCommands(inputString):
     type_keys(inputString)
 
 def type_keys(inputString):
+    # this seems scary to block input from user, but the docs say if this thread crashes it should return control anyway.
+    # this does NOT block ctrl+alt+del so users can still safely kill this if needed
+    noKeys = ctypes.windll.user32.BlockInput(True)
+    ReleaseAllKeys()
+    time.sleep(0.1)
     for c in inputString.upper():
         if c in DIKeys:
             PressKey(DIKeys[c])
+            time.sleep(0.025)
             ReleaseKey(DIKeys[c])
+            time.sleep(0.01)
+    time.sleep(0.1)
+    ReleaseAllKeys()
+    noKeys = ctypes.windll.user32.BlockInput(False)
+
+# helper method to hopefully prevent buffered keyboard presses from interfering with automated input
+def ReleaseAllKeys():
+    for c in DIKeys:
+        ReleaseKey(DIKeys[c])
 
 # C struct redefinitions
 # as per SerpentAI
@@ -106,5 +121,6 @@ def ReleaseKey(hexKeyCode):
 
 #InputCommands(sys.argv[1])
 InputCommands(' '.join(sys.argv[1:]))
+#ReleaseAllKeys()
 ### debugging
 #InputCommands("player.additem f 100")
