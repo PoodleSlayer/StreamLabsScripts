@@ -56,5 +56,33 @@
         "label" : "Permission Level",
         "tooltip" : "Specify the user permission level required to use this command",
         "group" : "General"
+    },
+    "useDelays" : {
+        "type" : "checkbox",
+        "value" : false,
+        "label" : "Use Delays",
+        "tooltip" : "Should the virtual keys be input with a delay? Useful for some games",
+        "group" : "Advanced"
+    },
+    "bufferDelay" : {
+        "type" : "textbox",
+        "value" : "0.1",
+        "label" : "Buffer Delay",
+        "tooltip" : "Time to wait after last keyboard input before inputting commands (in seconds).",
+        "group" : "Advanced"
+    },
+    "holdDelay" : {
+        "type" : "textbox",
+        "value" : "0.05",
+        "label" : "Hold Delay",
+        "tooltip" : "Time to hold down each virtual key input (in seconds).",
+        "group" : "Advanced"
+    },
+    "pressDelay" : {
+        "type" : "textbox",
+        "value" : "0.025",
+        "label" : "Press Delay",
+        "tooltip" : "Time to wait between each virtual key input (in seconds).",
+        "group" : "Advanced"
     }
 }

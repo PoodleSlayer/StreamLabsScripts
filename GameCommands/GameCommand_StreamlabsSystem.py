@@ -1,7 +1,6 @@
 import json
 import os
 import codecs
-import ctypes
 import sys
 import time
 sys.path.append(os.path.join(os.path.dirname(__file__), "lib")) #point at lib folder for classes / references
@@ -21,7 +20,7 @@ ScriptName = "Game Commands"
 Website = "https://github.com/poodleslayer"
 Description = "Attempts to input keys to the current application being used."
 Creator = "PoodleSlayer"
-Version = "1.2.4"
+Version = "1.3.0"
 
 settings = {}
 commandList = {}
@@ -38,6 +37,10 @@ Settings_CostMessage = "costMessage"
 Settings_Cooldown = "cooldown"
 Settings_CooldownMessage = "cooldownMessage"
 Settings_Permission = "permission"
+Settings_UseDelays = "useDelays"
+Settings_BufferDelay = "bufferDelay"
+Settings_HoldDelay = "holdDelay"
+Settings_PressDelay = "pressDelay"
 
 Replace_Username = "$user"
 Replace_Cooldown = "$cd"
@@ -45,8 +48,6 @@ Replace_Currency = "$currency"
 Replace_Cost = "$cost"
 
 def Init():
-    SendInput = ctypes.windll.user32.SendInput
-    
     global settings, commandName, commandList, pythonPath, scriptPath
     work_dir = os.path.dirname(__file__)
 
@@ -54,7 +55,8 @@ def Init():
     try:
         with codecs.open(os.path.join(work_dir, "config.json"), encoding='utf-8-sig') as json_file1:
             settings = json.load(json_file1, encoding='utf-8-sig')
-    except:
+    except Exception, se:
+        log("Could not open config.json, " + str(se))
         settings = {
             "commandName" : "!command",
             "invalidMessage" : "Invalid command value $user, please try again!",
@@ -63,7 +65,11 @@ def Init():
             "costMessage" : "$user does not have enough $currency",
             "cooldown" : 30,
             "cooldownMessage" : "$user still has $cd seconds until ready!",
-            "permission" : "Everyone"
+            "permission" : "Everyone",
+            "useDelays" : False,
+            "bufferDelay" : "0.1",
+            "holdDelay" : "0.05",
+            "pressDelay" : "0.025"
             }
 
     # load commands
@@ -71,7 +77,6 @@ def Init():
         with codecs.open(os.path.join(work_dir, "command_list.json"), encoding='utf-8-sig') as json_file2:
             commandList = json.load(json_file2, encoding='utf-8-sig')
     except Exception, fe:
-        print str(fe)
         log("Could not open command_list.json, " + str(fe))
         commandList = {
             "cheat1" : {
@@ -182,13 +187,27 @@ def sendGameCommand(inputString):
     p = Process()
     p.StartInfo.FileName = pythonPath
     # oh my gosh why does the chatbot folder have a space in it
-    p.StartInfo.Arguments = "\"" + scriptPath + "\"" + " " + inputString
+    pArgs = ""
+    pArgs = pArgs + "\"" + scriptPath + "\"" + " " + str(settings[Settings_UseDelays])
+    pArgs = pArgs + " " + settings[Settings_BufferDelay] + " " + settings[Settings_HoldDelay] + " " + settings[Settings_PressDelay]
+    pArgs = pArgs + " " + inputString
+    p.StartInfo.Arguments = pArgs
+    #log(pArgs)
+    p.StartInfo.RedirectStandardError = True
     p.StartInfo.UseShellExecute = False
     p.StartInfo.CreateNoWindow = True
     p.Start()
     #log("process started: " + p.StartInfo.FileName + p.StartInfo.Arguments)
     p.WaitForExit()
     #log("process exited with " + str(p.ExitCode))
+    pErrors = p.StandardError.ReadToEnd()
+    if len(pErrors) > 0:
+        log(p.StandardError.ReadToEnd())
+    return
+
+def ReloadSettings(jsonData):
+    # use this to hot reload settings without having to reload all scripts
+    Init()
     return
 
 def debugStuff():

@@ -48,22 +48,34 @@ DIKeys = {
 
 DIK_ENTER = 0x1C
 
-def InputCommands(inputString):
-    type_keys(inputString)
+def InputCommands(inputString, useDelays, bufferDelay, holdDelay, pressDelay):
+    # i know i could do this with default parameters and one function but it's cleaner
+    # to have 2 functions than 1 with a bunch of if statements
+    if (useDelays == 'True'):
+        typeKeysDelay(inputString, bufferDelay, holdDelay, pressDelay)
+    else:
+        typeKeys(inputString)
 
-def type_keys(inputString):
+def typeKeys(inputString):
+    for c in inputString.upper():
+        if c in DIKeys:
+            PressKey(DIKeys[c])
+            ReleaseKey(DIKeys[c])
+
+def typeKeysDelay(inputString, bufferDelay, holdDelay, pressDelay):
+    # use this function to input keys with various delays between actions
     # this seems scary to block input from user, but the docs say if this thread crashes it should return control anyway.
     # this does NOT block ctrl+alt+del so users can still safely kill this if needed
     noKeys = ctypes.windll.user32.BlockInput(True)
     ReleaseAllKeys()
-    time.sleep(0.1)
+    time.sleep(bufferDelay)
     for c in inputString.upper():
         if c in DIKeys:
             PressKey(DIKeys[c])
-            time.sleep(0.025)
+            time.sleep(holdDelay)
             ReleaseKey(DIKeys[c])
-            time.sleep(0.01)
-    time.sleep(0.1)
+            time.sleep(pressDelay)
+    time.sleep(bufferDelay)
     ReleaseAllKeys()
     noKeys = ctypes.windll.user32.BlockInput(False)
 
@@ -120,7 +132,10 @@ def ReleaseKey(hexKeyCode):
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
 #InputCommands(sys.argv[1])
-InputCommands(' '.join(sys.argv[1:]))
+# argv[1] is useDelays, [2] is bufferDelay, [3] is holdDelay, [4] is pressDelay, and [5:] are the strings to be entered
+# consider switching to argparse c:
+InputCommands(' '.join(sys.argv[5:]), sys.argv[1], float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4]))
 #ReleaseAllKeys()
 ### debugging
-#InputCommands("player.additem f 100")
+#InputCommands("player.additem f 100", True, 0.1, 0.05, 0.025)
+#InputCommands("player.additem f 100", False, 1, 1, 1)

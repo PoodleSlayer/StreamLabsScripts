@@ -6,6 +6,8 @@ This script allows you to (hopefully) let chat interact with the game or app you
 
 Some games will detect automated keyboard inputs and consider this as a cheat or hack. **DO NOT** attempt to use this script with modern games with cheat detection or otherwise exploit automated inputs (like making macros). This is purely meant to be for fun with older games to do things like quickly enter a cheat code or provide some input to mess with the streamer. Be smart about what games you use this with!
 
+Also, if using the delayed input setting, this script attempts to [disable the user's keyboard temporarily](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-blockinput) while the virtual keys are input. This is not ideal but is the only way I could think to get around games that require a slower input (probably based on engine update loop speeds). However, if I am reading Microsoft's documentation correctly, this seems relatively easy to recover from should anything go wrong. Ctrl+Alt+Del will still work so you can just kill the program, and if the script crashes while the input is blocked for some reason then the block should just be released. Regardless: **use at your own discretion!**
+
 ## Command Usage
 
 In the included `command_list.json` file you can add commands you wish to use with this script. The example commands included are in the format of cheat codes for a game like GTA Vice City, where the corresponding input to the game is a single string of letters with no spaces. Currently this script is limited to purely alphabetic input (must be only letters, no spaces) but I will probably expand this pretty soon based on needs.
@@ -45,6 +47,12 @@ This script supports a variety of User Settings via the StreamLabs script UI:
 - **Cooldown** - how long (in seconds) users must wait between successive uses of this command. Defaults to 30 seconds.
 - **Cooldown Message** - message to display in chat if the user is still on a cooldown, showing the remaining cooldown duration in seconds. Supports the `$user` and `$cd` variables where `$user` is username and `$cd` is the remaining cooldown duration in seconds.
 - **Permission** - who is allowed to use this command. Supports the basic StreamLabs role groups (Everyone, Regular, Subscriber, Moderator, Editor) and defaults to Everyone.
+
+As well as a few Advanced Settings if you need the virtual key inputs to have various delays rather than being input instantly (I recommend keeping these times as small as you can):
+- **Use Delays** - checkbox to enable or disable artificial delays in the inputs. When using this, **keyboard events are temporarily disabled by the script**. Ctrl+Alt+Del can still be used if anything goes horribly wrong, and I believe the way I am currently doing this is thread-safe so that if the script crashes then control will be returned to the user anyway. Defaults to OFF.
+- **Buffer Delay** - amount of time to wait in seconds after the script has temporarily stopped reading physical keyboard inputs. Useful for games where key presses might be buffered and therefore interfering with the virtual inputs. Defaults to 0.1 seconds.
+- **Hold Delay** - amount of time to wait in seconds before releasing a key press. This helps if your key presses are too quick to be captured and need to be slower to simulate a real keypress. Defaults to 0.05 seconds.
+- **Press Delay** - amount of time to wait in seconds between each virtual key press. Can be helpful if input requires successive key presses of the same key. Defaults to 0.025 seconds.
 
 ## Why Two Script Files?
 
