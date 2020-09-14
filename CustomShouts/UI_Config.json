@@ -1,0 +1,32 @@
+{
+    "output_file" : "config.json",
+    "commandName" : {
+        "type" : "textbox",
+        "value" : "!shout",
+        "label" : "Command Name",
+        "tooltip" : "Name of the command as it will be used in chat",
+        "group" : "General"
+    },
+    "defaultMessage" : {
+        "type" : "textbox",
+        "value" : "Everyone go check out $user over at their channel! $channel",
+        "label" : "Default Message",
+        "tooltip" : "The default shoutout message to be displayed",
+        "group" : "General"
+    },
+    "cooldown" : {
+        "type" : "numberbox",
+        "value" : 5,
+        "label" : "Global Cooldown in seconds",
+        "tooltip" : "How long users must wait before using the command (in seconds)",
+        "group" : "General"
+    },
+    "permission" : {
+        "type" : "dropdown",
+        "value" : "Moderator",
+        "items" : ["Everyone","Regular","Subscriber","Moderator","Editor"],
+        "label" : "Permission Level",
+        "tooltip" : "Specify the user permission level required to use this command",
+        "group" : "General"
+    }
+}
