@@ -1,0 +1,109 @@
+{
+    "output_file" : "config.json",
+    "commandName" : {
+        "type" : "textbox",
+        "value" : "!timers",
+        "label" : "Command Name",
+        "tooltip" : "Name of the command as it will be used in chat",
+        "group" : "General"
+    },
+    "addMessage" : {
+        "type" : "textbox",
+        "value" : "timer '$timer' successfully added!",
+        "label" : "Add Message",
+        "tooltip" : "The response message to be sent by the chatbot when a timer is created",
+        "group" : "General"
+    },
+    "updateMessage" : {
+        "type" : "textbox",
+        "value" : "timer '$timer' successfully updated!",
+        "label" : "Update Message",
+        "tooltip" : "The response message to be sent by the chatbot when a timer is updated",
+        "group" : "General"
+    },
+    "deleteMessage" : {
+        "type" : "textbox",
+        "value" : "timer '$timer' successfully removed!",
+        "label" : "Delete Message",
+        "tooltip" : "The response message to be sent by the chatbot when a timer is deleted",
+        "group" : "General"
+    },
+    "clearMessage" : {
+        "type" : "textbox",
+        "value" : "all timers have been deleted!",
+        "label" : "Clear Message",
+        "tooltip" : "The response message to be sent by the chatbot when someone deletes all timers",
+        "group" : "General"
+    },
+    "errorMessage" : {
+        "type" : "textbox",
+        "value" : "incorrect usage - please try again",
+        "label" : "Error Message",
+        "tooltip" : "The response message to be sent by the chatbot when the command is used incorrectly",
+        "group" : "General"
+    },
+    "invalidMessage" : {
+        "type" : "textbox",
+        "value" : "invalid time format! please specify time as XXhYYmZZs",
+        "label" : "Invalid Message",
+        "tooltip" : "The response message to be sent by the chatbot when using an incorrect time format",
+        "group" : "General"
+    },
+    "existsMessage" : {
+        "type" : "textbox",
+        "value" : "timer '$timer' already exists!",
+        "label" : "Exists Message",
+        "tooltip" : "The response message to be sent by the chatbot when adding a timer that already exists",
+        "group" : "General"
+    },
+    "notFoundMessage" : {
+        "type" : "textbox",
+        "value" : "timer '$timer' not found",
+        "label" : "Not Found Message",
+        "tooltip" : "The response message to be sent by the chatbot when specifying a timer name that does not exist",
+        "group" : "General"
+    },
+    "timerList" : {
+        "type" : "textbox",
+        "value" : "Active timers: ",
+        "label" : "Timer List Message",
+        "tooltip" : "Label for the list of timers",
+        "group" : "General"
+    },
+    "timerMessage" : {
+        "type" : "textbox",
+        "value" : "$name the timer for '$timer' has ended!",
+        "label" : "Timer Message",
+        "tooltip" : "Message to be sent by the chatbot when a timer has finished",
+        "group" : "General"
+    },
+    "useCooldown" : {
+        "type" : "checkbox",
+        "value" : false,
+        "label" : "Use Cooldown",
+        "tooltip" : "Enable global cooldowns for this command",
+        "group" : "General"
+    },
+    "cooldown" : {
+        "type" : "numberbox",
+        "value" : 5,
+        "label" : "Cooldown",
+        "tooltip" : "Global cooldown, in seconds",
+        "group" : "General"
+    },
+    "cooldownMessage" : {
+        "type" : "textbox",
+        "value" : "Please wait $cd seconds before modifying the timers!",
+        "label" : "Cooldown Message",
+        "tooltip" : "Global cooldown, in seconds",
+        "group" : "General"
+    },
+    "permission" : {
+        "type" : "dropdown",
+        "value" : "Moderator",
+        "items" : ["Moderator","Editor"],
+        "label" : "Permission Level",
+        "tooltip" : "Specify the user permission level required to use this command",
+        "group" : "General"
+    }
+}
