@@ -7,11 +7,19 @@ ScriptName = "Custom Shoutouts"
 Website = "https://github.com/poodleslayer"
 Description = "Customize Shoutouts for different people!"
 Creator = "PoodleSlayer"
-Version = "1.0.0"
+Version = "1.1.0"
 
 settings = {}
 shouts = {}
 commandName = ""
+
+Settings_CommandName = "commandName"
+Settings_DefaultMessage = "defaultMessage"
+Settings_TargetMessage = "targetMessage"
+Settings_UseCooldown = "useCooldown"
+Settings_Cooldown = "cooldown"
+Settings_CooldownMessage = "cooldownMessage"
+Settings_Permission = "permission"
 
 def Init():
     global settings, shouts, commandName
@@ -23,8 +31,11 @@ def Init():
     except:
         settings = {
             "commandName" : "!shout",
-            "defaultMessage" : "Everyone go check out $user over at their channel! $channel",
+            "defaultMessage" : "Everyone go check out $name over at their channel! $channel",
+            "targetMessage" : "Please specify a target for the command!",
+            "useCooldown" : False,
             "cooldown" : 5,
+            "cooldownMessage" : "Please wait $cd more seconds to use this command!",
             "permission" : "Moderator"
             }
     # load the custom shoutouts
@@ -38,14 +49,24 @@ def Init():
             }
     # convert shoutout dict keys to lower case for case-insensitive matching
     shouts =  {k.lower(): v for k, v in shouts.items()}
-    commandName = settings["commandName"]
+    commandName = settings[Settings_CommandName]
     return
 
 def Execute(data):
-    if data.IsChatMessage() and (data.GetParam(0).lower() == commandName) and Parent.HasPermission(data.User, settings["permission"], "") and not Parent.IsOnCooldown(ScriptName, commandName):
+    if data.IsChatMessage() and (data.GetParam(0).lower() == commandName) and Parent.HasPermission(data.User, settings["permission"], ""):
+        if settings[Settings_Cooldown] and (Parent.IsOnUserCooldown(ScriptName, commandName, data.User) or Parent.IsOnCooldown(ScriptName, commandName)):
+            cooldownDuration = Parent.GetCooldownDuration(ScriptName, commandName)
+            if cooldownDuration < 1:
+                cooldownDuration = 1
+            cooldownMessage = settings[Settings_CooldownMessage]
+            cooldownMessage = cooldownMessage.replace("$cd", str(cooldownDuration))
+            send_message(cooldownMessage)
+            return
+
         paramCount = data.GetParamCount()
         if paramCount < 2:
             #log("not enough parameters!")
+            send_message(settings[Settings_TargetMessage])
             return
 
         targetUser = data.GetParam(1)
@@ -57,12 +78,13 @@ def Execute(data):
         if targetUserLower in shouts:
             responseMessage = shouts[targetUserLower]
         else:
-            responseMessage = settings["defaultMessage"]
-        responseMessage = responseMessage.replace("$user", targetUser)
+            responseMessage = settings[Settings_DefaultMessage]
+        responseMessage = responseMessage.replace("$name", targetUser)
         responseMessage = responseMessage.replace("$channel", "https://www.twitch.tv/" + targetUser)
 
         send_message(responseMessage)
-        Parent.AddCooldown(ScriptName, commandName, settings["cooldown"])
+        if settings[Settings_UseCooldown]:
+            Parent.AddCooldown(ScriptName, commandName, settings[Settings_Cooldown])
     return
 
 def Tick():

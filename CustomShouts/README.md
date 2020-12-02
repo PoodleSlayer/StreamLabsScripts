@@ -27,8 +27,11 @@ To simplify things, all usernames are converted to lower case before comparison 
 This script supports a few settings via the StreamLabs Scripts tab:
 
 - **Command Name** - the name of this command as it will be used in chat. Defaults to `!shout`
-- **Default Message** - default shoutout message for any usernames not covered by custom shoutouts. Supports the `$user` and `$channel` parameters for displaying the target username and channel name, respectively.
+- **Default Message** - default shoutout message for any usernames not covered by custom shoutouts. Supports the `$name` and `$channel` parameters for displaying the target username and channel URL, respectively.
+- **Target Message** - the message to display in chat if the command is used without a target. 
+- **Use Cooldown** - enables a global cooldown for this command. Defaults to `false`.
 - **Global Cooldown** - global cooldown (in seconds) to be applied to this command. The cooldown is **global** meaning it is independent of whoever uses the command. Defaults to 5 seconds.
+- **Cooldown Message** - the message to display in chat if the command is still on cooldown. Supports the `$cd` variable for displaying remaining cooldown duration in seconds.
 - **Permission Level** - the required permission level to use this command. Defaults to `Moderator` to avoid chat spam and also to only let trusted users shout people out c:
 
 ## Possible Future Features
