@@ -10,13 +10,13 @@ Also, if using the delayed input setting, this script attempts to [disable the u
 
 ## Command Usage
 
-In the included `command_list.json` file you can add commands you wish to use with this script. The example commands included are in the format of cheat codes for a game like GTA Vice City, where the corresponding input to the game is a single string of letters with no spaces. Currently this script is limited to purely alphabetic input (must be only letters, no spaces) but I will probably expand this pretty soon based on needs.
+In the included `command_list.json` file you can add commands you wish to use with this script. The example commands included are in the format of cheat codes for a game like GTA Vice City, where the corresponding input to the game is a single string of letters with no spaces. Currently this script supports letters, numbers, spaces, periods, and back-ticks (the thing next to the 1 key) for the virtual key inputs.
 
-Using the example commands provided in the `command_list.json` file we see that a value of `cheat1` corresponds to the string `CHEATONE`. To use the chat command a user simply types
+Using the example commands provided in the `command_list.json` file we see that a value of `cheat1` corresponds to the string `CHEATONE`. To use the chat command a user simply types:
 ```
 !command cheat1
 ```
-and the script will attempt to send the corresponding text keys `CHEATONE` to the game/app that currently has focus.
+and the script will attempt to send the corresponding text keys `CHEATONE` to the game/app that currently has focus. The keys are **case-insenstive** for convenience, so even if you name the command `cHeAt1` in your `command_list.json` file, a user can just type `cheat1` to use it! Or `CHEAT1`, `CHeaT1` etc.
 
 Feel free to completely modify the `command_list.json` file, just be sure to keep it in the format of:
 ```json
@@ -33,7 +33,7 @@ Feel free to completely modify the `command_list.json` file, just be sure to kee
     }
 }
 ```
-and so on, where `value` is the series of keys that will be input to the game, `cost` is how many channel points it costs to use, and `message` is the message to show in chat (which supports the `$user` variable to reference the username of whoever used the command).
+and so on, where `value` is the series of keys that will be input to the game, `cost` is how many channel points it costs to use, and `message` is the message to show in chat. The message supports the `$user` variable for displaying the calling username as well as the `$currency` variable for showing the amount of points that were used.
 
 ## User Settings
 

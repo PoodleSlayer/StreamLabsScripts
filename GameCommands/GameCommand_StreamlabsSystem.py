@@ -20,10 +20,11 @@ ScriptName = "Game Commands"
 Website = "https://github.com/poodleslayer"
 Description = "Attempts to input keys to the current application being used."
 Creator = "PoodleSlayer"
-Version = "1.3.0"
+Version = "1.3.1"
 
 settings = {}
 commandList = {}
+commandMap = {}
 commandName = ""
 pythonPath = ""
 scriptPath = ""
@@ -48,7 +49,7 @@ Replace_Currency = "$currency"
 Replace_Cost = "$cost"
 
 def Init():
-    global settings, commandName, commandList, pythonPath, scriptPath
+    global settings, commandName, commandList, commandMap, pythonPath, scriptPath
     work_dir = os.path.dirname(__file__)
 
     # load UI settings
@@ -87,6 +88,7 @@ def Init():
         }
     
     commandName = settings[Settings_CommandName]
+    commandMap =  {k.lower(): k for k, v in commandList.items()}
     pythonPath = os.path.join(os.__file__.split("Lib\\")[0], "python.exe")
     scriptPath = os.path.dirname(os.path.abspath(__file__))
     scriptPath = os.path.join(scriptPath, "keys.py")
@@ -109,15 +111,18 @@ def Execute(data):
         # check for cooldown first
         if Parent.IsOnUserCooldown(ScriptName, commandName, data.User):
             cooldownDuration = Parent.GetUserCooldownDuration(ScriptName, commandName, userId)
+            if cooldownDuration < 1:
+                cooldownDuration = 1
             chatMessage = settings[Settings_CooldownMessage]
             chatMessage = chatMessage.replace(Replace_Username, username)
+            # probably want better grammar here to avoid "1 seconds" 
             chatMessage = chatMessage.replace(Replace_Cooldown, str(cooldownDuration))
             send_message(chatMessage)
             return
 
         # get the command parameter
         try:
-            commandToUse = str(data.GetParam(1))
+            commandToUse = commandMap[str(data.GetParam(1)).lower()]
             #log(data.User + " used the command: " + data.Message)
         except Exception, e:
             chatMessage = settings[Settings_InvalidMessage]

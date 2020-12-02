@@ -5,13 +5,13 @@
         "cost" : 10,
         "message" : "$user has given me 100 gold"
     },
-    "cheat2" : 
+    "cHeAt2" : 
     {
         "value" : "CHEATTWO",
         "cost" : 50,
         "message" : "cheat2 was used by $user for $cost"
     },
-    "cheat3" :
+    "Cheat3" :
     {
         "value" : "CHEATTHREE",
         "cost" : 100,
