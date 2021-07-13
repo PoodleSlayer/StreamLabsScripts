@@ -43,26 +43,38 @@ DIKeys = {
     '7' : 0x08,
     '8' : 0x09,
     '9' : 0x0A,
-    '.' : 0x34
+    '.' : 0x34,
+    'F1': 0x3B,
+    'F2': 0x3C,
+    'F3': 0x3D,
+    'F4': 0x3E,
+    'F5': 0x3F,
+    'F6': 0x40,
+    'F7': 0x41,
+    'F8': 0x42,
+    'F9': 0x43
 }
 
 DIK_ENTER = 0x1C
+FnNums = "123456789"
 
-def InputCommands(inputString, useDelays, bufferDelay, holdDelay, pressDelay):
+def InputCommands(inputString, useDelays, bufferDelay, holdDelay, pressDelay, useFnKeys):
     # i know i could do this with default parameters and one function but it's cleaner
     # to have 2 functions than 1 with a bunch of if statements
     if (useDelays == 'True'):
-        typeKeysDelay(inputString, bufferDelay, holdDelay, pressDelay)
+        typeKeysDelay(inputString, bufferDelay, holdDelay, pressDelay, useFnKeys)
     else:
-        typeKeys(inputString)
+        typeKeys(inputString, useFnKeys)
 
-def typeKeys(inputString):
+def typeKeys(inputString, useFnKeys):
     for c in inputString.upper():
         if c in DIKeys:
+            if useFnKeys == 'True' and c in FnNums:
+                c = 'F' + c
             PressKey(DIKeys[c])
             ReleaseKey(DIKeys[c])
 
-def typeKeysDelay(inputString, bufferDelay, holdDelay, pressDelay):
+def typeKeysDelay(inputString, bufferDelay, holdDelay, pressDelay, useFnKeys):
     # use this function to input keys with various delays between actions
     # this seems scary to block input from user, but the docs say if this thread crashes it should return control anyway.
     # this does NOT block ctrl+alt+del so users can still safely kill this if needed
@@ -71,6 +83,8 @@ def typeKeysDelay(inputString, bufferDelay, holdDelay, pressDelay):
     time.sleep(bufferDelay)
     for c in inputString.upper():
         if c in DIKeys:
+            if useFnKeys == 'True' and c in FnNums:
+                c = 'F' + c
             PressKey(DIKeys[c])
             time.sleep(holdDelay)
             ReleaseKey(DIKeys[c])
@@ -132,10 +146,11 @@ def ReleaseKey(hexKeyCode):
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
 #InputCommands(sys.argv[1])
-# argv[1] is useDelays, [2] is bufferDelay, [3] is holdDelay, [4] is pressDelay, and [5:] are the strings to be entered
-# consider switching to argparse c:
-InputCommands(' '.join(sys.argv[5:]), sys.argv[1], float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4]))
+# argv[1] is useDelays, [2] is bufferDelay, [3] is holdDelay, [4] is pressDelay, [5] is useFnKeys, and [6:] are the strings to be entered
+# i reeeaaaally should switch to argparse c':
+InputCommands(' '.join(sys.argv[6:]), sys.argv[1], float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4]), sys.argv[5])
 #ReleaseAllKeys()
 ### debugging
 #InputCommands("player.additem f 100", True, 0.1, 0.05, 0.025)
 #InputCommands("player.additem f 100", False, 1, 1, 1)
+#InputCommands("1 cat 2 dog", False, 0, 0, 0, True)

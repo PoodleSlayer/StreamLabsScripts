@@ -84,5 +84,12 @@
         "label" : "Press Delay",
         "tooltip" : "Time to wait between each virtual key input (in seconds).",
         "group" : "Advanced"
+    },
+    "useFnKeys" : {
+        "type" : "checkbox",
+        "value" : false,
+        "label" : "Use Function Keys",
+        "tooltip" : "Treat numbers 1-9 as Function Keys (quick workaround until better solution)",
+        "group" : "Advanced"
     }
 }

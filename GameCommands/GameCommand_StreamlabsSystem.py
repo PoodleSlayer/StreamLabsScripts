@@ -42,6 +42,7 @@ Settings_UseDelays = "useDelays"
 Settings_BufferDelay = "bufferDelay"
 Settings_HoldDelay = "holdDelay"
 Settings_PressDelay = "pressDelay"
+Settings_UseFnKeys = "useFnKeys"
 
 Replace_Username = "$user"
 Replace_Cooldown = "$cd"
@@ -56,7 +57,7 @@ def Init():
     try:
         with codecs.open(os.path.join(work_dir, "config.json"), encoding='utf-8-sig') as json_file1:
             settings = json.load(json_file1, encoding='utf-8-sig')
-    except Exception, se:
+    except Exception as se:
         log("Could not open config.json, " + str(se))
         settings = {
             "commandName" : "!command",
@@ -70,14 +71,15 @@ def Init():
             "useDelays" : False,
             "bufferDelay" : "0.1",
             "holdDelay" : "0.05",
-            "pressDelay" : "0.025"
+            "pressDelay" : "0.025",
+            "useFnKeys" : False
             }
 
     # load commands
     try:
         with codecs.open(os.path.join(work_dir, "command_list.json"), encoding='utf-8-sig') as json_file2:
             commandList = json.load(json_file2, encoding='utf-8-sig')
-    except Exception, fe:
+    except Exception as fe:
         log("Could not open command_list.json, " + str(fe))
         commandList = {
             "cheat1" : {
@@ -124,7 +126,7 @@ def Execute(data):
         try:
             commandToUse = commandMap[str(data.GetParam(1)).lower()]
             #log(data.User + " used the command: " + data.Message)
-        except Exception, e:
+        except Exception as e:
             chatMessage = settings[Settings_InvalidMessage]
             chatMessage = chatMessage.replace(Replace_Username, username)
             send_message(chatMessage)
@@ -134,7 +136,7 @@ def Execute(data):
         try:
             commandValue = commandList[commandToUse]["value"]
             commandMessage = commandList[commandToUse]["message"]
-        except KeyError, ke:
+        except KeyError as ke:
             chatMessage = commandToUse + " has not been set up correctly: " + str(ke.message)
             send_message(chatMessage)
             return
@@ -195,7 +197,7 @@ def sendGameCommand(inputString):
     pArgs = ""
     pArgs = pArgs + "\"" + scriptPath + "\"" + " " + str(settings[Settings_UseDelays])
     pArgs = pArgs + " " + settings[Settings_BufferDelay] + " " + settings[Settings_HoldDelay] + " " + settings[Settings_PressDelay]
-    pArgs = pArgs + " " + inputString
+    pArgs = pArgs + " " + str(settings[Settings_UseFnKeys]) + " " + inputString
     p.StartInfo.Arguments = pArgs
     #log(pArgs)
     p.StartInfo.RedirectStandardError = True

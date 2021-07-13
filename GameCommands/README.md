@@ -53,6 +53,7 @@ As well as a few Advanced Settings if you need the virtual key inputs to have va
 - **Buffer Delay** - amount of time to wait in seconds after the script has temporarily stopped reading physical keyboard inputs. Useful for games where key presses might be buffered and therefore interfering with the virtual inputs. Defaults to 0.1 seconds.
 - **Hold Delay** - amount of time to wait in seconds before releasing a key press. This helps if your key presses are too quick to be captured and need to be slower to simulate a real keypress. Defaults to 0.05 seconds.
 - **Press Delay** - amount of time to wait in seconds between each virtual key press. Can be helpful if input requires successive key presses of the same key. Defaults to 0.025 seconds.
+- **Use FnKeys** - checkbox that enables treating numeric inputs between 1-9 as Function Keys instead. Currently uses a temporary solution which is why it is limited to F1-F9. **Be careful when using Function Keys** - only use them if you're 100% sure you want them! Requested by a friend to allow quick save/load in games.
 
 ## Why Two Script Files?
 

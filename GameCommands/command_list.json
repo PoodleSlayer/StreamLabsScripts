@@ -16,5 +16,11 @@
         "value" : "CHEATTHREE",
         "cost" : 100,
         "message" : "cheat3, from $user with love."
+    },
+    "refresh" :
+    {
+        "value" : "5",
+        "cost" : 10,
+        "message" : "this would quick load with FnKeys on"
     }
 }
