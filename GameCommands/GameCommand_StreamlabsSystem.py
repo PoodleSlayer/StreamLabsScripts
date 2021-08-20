@@ -20,7 +20,7 @@ ScriptName = "Game Commands"
 Website = "https://github.com/poodleslayer"
 Description = "Attempts to input keys to the current application being used."
 Creator = "PoodleSlayer"
-Version = "1.3.1"
+Version = "1.4.0"
 
 settings = {}
 commandList = {}

@@ -52,7 +52,11 @@ DIKeys = {
     'F6': 0x40,
     'F7': 0x41,
     'F8': 0x42,
-    'F9': 0x43
+    'F9': 0x43,
+    '-' : 0x4A, # numpad -
+    '+' : 0x4E, # numpad +
+    '*' : 0x37, # numpad *
+    '/' : 0xB5  # numpad /
 }
 
 DIK_ENTER = 0x1C
